@@ -1,0 +1,113 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="container py-5">
+    <div class="mb-4 text-center">
+        <img src="{% static 'img/logo.png' %}" alt="DOB Task Manager" class="img-fluid" style="max-width: 100px;">
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-4 text-center">
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        Create an Account
+                    </h4>
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label }}</label>
+
+                            {% if field.name == 'password1' or field.name == 'password2' %}
+                            <div class="input-group">
+                                {{ field }}
+                                <button class="btn btn-outline-secondary" type="button" id="toggle-{{ field.name }}">
+                                    <i class="bi bi-eye-slash" id="icon-{{ field.name }}"></i>
+                                </button>
+                            </div>
+                            {% else %}
+                            {{ field }}
+                            {% endif %}
+
+                            {% if field.help_text %}
+                            <div class="form-text">
+                                {{ field.help_text|safe }}
+                            </div>
+                            {% endif %}
+
+                            {% if field.errors %}
+                            <div class="text-danger small">
+                                {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-person-check-fill"></i>
+                            Sign Up
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0">
+                        Already have an account?
+                        <a href="{% url 'user_login' %}">Login here</a>
+                    </p>
+
+                    <div class="mt-4 text-center border-top pt-3">
+                        <small class="text-muted d-block mb-1">Having trouble?</small>
+                        <small>
+                            Contact Support:
+                            <a href="mailto:support@sustaura.edu" class="text-decoration-none">dawn.of.bioinformatics@gmail.com</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
+
+
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupToggle(fieldId, toggleId, iconId) {
+            const toggle = document.getElementById(toggleId);
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+
+            if (toggle && input && icon) {
+                toggle.addEventListener('click', function () {
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+
+                    if (type === 'text') {
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    } else {
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    }
+                });
+            }
+        }
+
+        setupToggle('id_password1', 'toggle-password1', 'icon-password1');
+        setupToggle('id_password2', 'toggle-password2', 'icon-password2');
+    });
+</script>
+{% endblock script %}
+
+

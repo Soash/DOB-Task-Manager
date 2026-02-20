@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Task Manager | AdminLTE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- ================= AdminLTE + Dependencies (CDN) ================= -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <!-- Brand -->
+        <a href="#" class="brand-link">
+            <img src="{% static 'img/logo.png' %}" alt="DOB Task Manager Logo" class="img-circle brand-image elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">DOB Task Manager</span>
+        </a>
+
+        <div class="sidebar">
+
+            <!-- User panel -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <i class="fas fa-user-circle fa-2x text-white"></i>
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">
+                        {{ request.user.first_name|default:request.user.username }}
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column"
+                    data-widget="treeview" role="menu">
+                    <li class="nav-header">Task Dashboard</li>
+                    <li class="nav-item">
+                        <a href="{% url 'task_list_by_status' 'PENDING' %}"
+                           class="nav-link {% if current_status == 'PENDING' %}active{% endif %}">
+                            <i class="nav-icon fas fa-hourglass-half"></i>
+                            <p>Pending</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'task_list_by_status' 'IN_PROGRESS' %}"
+                           class="nav-link {% if current_status == 'IN_PROGRESS' %}active{% endif %}">
+                            <i class="nav-icon fas fa-sync-alt"></i>
+                            <p>In Progress</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'task_list_by_status' 'COMPLETED' %}"
+                           class="nav-link {% if current_status == 'COMPLETED' %}active{% endif %}">
+                            <i class="nav-icon fas fa-check-circle"></i>
+                            <p>Completed</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'user_logout' %}"
+                           class="nav-link">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>Logout</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- ================= CONTENT ================= -->
+    <div class="content-wrapper">
+
+        <div class="content border-bottom mb-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center p-4">
+                        <h1 class="h4 m-0 pr-3 mr-3 border-right">{{ status_label }} Tasks</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+
+                {% if tasks %}
+                <div class="card card-outline card-primary">
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Assigned By</th>
+                                    <th>Created at</th>
+                                    <th>Updated at</th>
+                                    <th>Deadline at</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ task.title }}</strong>
+                                        <div class="text-muted small">
+                                            {{ task.description|truncatechars:60 }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        {% if task.priority == 'HIGH' or task.priority == 'URGENT' %}
+                                            <span class="badge badge-danger">
+                                        {% elif task.priority == 'MEDIUM' %}
+                                            <span class="badge badge-warning">
+                                        {% else %}
+                                            <span class="badge badge-success">
+                                        {% endif %}
+                                            {{ task.get_priority_display }}
+                                        </span>
+                                    </td>
+
+                                    <td>{{ task.get_status_display }}</td>
+                                    
+                                    <td>
+                                        {{ task.assigned_by.get_full_name|default:task.assigned_by.username|default:"—" }}
+                                    </td>
+                                    
+                                    <td>
+                                        {{ task.status_updated_at|default:"—" }}
+                                    </td>
+                                    <td>
+                                        {{ task.created_at|default:"—" }}
+                                    </td>
+                                    
+                                    <td>{{ task.deadline|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if task.status == 'PENDING' %}
+                                        <form method="POST" action="{% url 'update_task_status' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                                            <input type="hidden" name="status" value="IN_PROGRESS">
+                                            <button class="btn btn-sm btn-primary">
+                                                Start
+                                            </button>
+                                        </form>
+
+                                        {% elif task.status == 'IN_PROGRESS' %}
+                                        <form method="POST" action="{% url 'update_task_status' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                                            <input type="hidden" name="status" value="COMPLETED">
+                                            <button class="btn btn-sm btn-success">
+                                                Complete
+                                            </button>
+                                        </form>
+
+                                        {% else %}
+                                        <span class="badge badge-secondary">Done</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        No {{ status_label|lower }} tasks found.
+                    </div>
+                {% endif %}
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="main-footer text-sm">
+        <div class="float-right d-none d-sm-inline">
+            <b>Jazzmin version</b> 3.0.2
+        </div>
+        <strong>Copyright © 2026 DOB Task Manager.</strong> All rights reserved.    
+    </footer>
+
+</div>
+
+<!-- ================= JS (CDN) ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+</body>
+</html>

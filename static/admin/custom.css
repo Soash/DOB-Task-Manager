@@ -1,0 +1,44 @@
+/* Hide Dashboard link in Jazzmin sidebar */
+.sidebar .nav-item > a[href="/admin/"] {
+    display: none !important;
+}
+
+/* Hide Django/Jazzmin breadcrumbs */
+.breadcrumb {
+    display: none !important;
+}
+
+/* Hide the small quiet search results span */
+#search_group .small.quiet {
+    display: none !important;
+}
+
+.dataTables_info input[type="submit"] {
+    padding: 0.6rem 1.2rem; /* Increase button size */
+    font-size: 1rem;         /* Bigger text */
+    border-radius: 0.4rem;   /* Rounded corners */
+    margin-left: 20px;
+}
+
+.info a {
+    color: #c2c7d0 !important;        /* inherits parent text color */
+    text-decoration: none; /* removes underline */
+}
+
+.login-logo img {
+    width: 120px;      /* desired width */
+    height: auto;      /* maintain aspect ratio */
+    object-fit: contain;
+}
+
+
+.selector-add, .selector-remove {
+    border: none;
+    width: 100%;
+}
+
+/* Change link color inside success alert */
+.alert-success a {
+    color: #ffffff !important; /* your desired color */
+    text-decoration: none; /* optional */
+}

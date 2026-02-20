@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock style %}
+    
+
+{% block main %}
+<main class="content d-flex flex-column justify-content-center flex-grow-1">
+
+    <!-- Logo -->
+    <div class="mb-4 text-center">
+        <img src="{% static 'img/logo.png' %}" alt="DOB Task Manager" class="img-fluid" style="max-width: 150px;">
+    </div>
+
+
+    <div class="container py-1">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4 text-center">Login</h3>
+
+                        <form method="POST" novalidate>
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Email address</label>
+                                {{ form.username }}
+                                {{ form.username.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    {{ form.password }}
+                                    <button class="btn btn-outline-secondary" type="button" id="toggle-password">
+                                        <i class="bi bi-eye-slash" id="icon-password"></i>
+                                    </button>
+                                </div>
+                                {{ form.password.errors }}
+                            </div>
+
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <a href="{% url 'password_reset' %}" class="small">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+
+                        <p class="text-center mt-3 mb-0">
+                            Don't have an account? <a href="{% url 'user_registration' %}">Register here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock main %}
+
+
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupToggle(fieldId, toggleId, iconId) {
+            const toggle = document.getElementById(toggleId);
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+
+            if (toggle && input && icon) {
+                toggle.addEventListener('click', function () {
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+
+                    if (type === 'text') {
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    } else {
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    }
+                });
+            }
+        }
+
+        setupToggle('id_password', 'toggle-password', 'icon-password');
+    });
+</script>
+{% endblock script %}

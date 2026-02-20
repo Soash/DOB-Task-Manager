@@ -1,0 +1,22 @@
+
+/* Make the page take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Make the body a flex container in column direction */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content grows to take available space */
+main, .content {
+    flex: 1 0 auto;  /* grow and shrink as needed */
+}
+
+/* Footer sticks to bottom */
+footer {
+    flex-shrink: 0;  /* prevents footer from shrinking */
+}

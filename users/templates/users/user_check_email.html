@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block main %}
+
+<div class="container my-5">
+    <div class="bg-info-subtle p-4 rounded border border-info">
+        <h4 class="text-info-emphasis">Please Confirm Your Email Address</h4>
+        <p>We have sent an email to <strong>{{ email }}</strong>. Please check your email and click on the link to
+            activate your account.</p>
+        <hr class="border-info-subtle">
+        <p class="mb-0">If you don't see the email, check your spam folder.</p>
+    </div>
+</div>
+
+{% endblock %}
+
