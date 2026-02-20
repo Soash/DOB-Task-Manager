@@ -34,7 +34,8 @@ if ENVIRONMENT == 'development':
     ALLOWED_HOSTS = ['*']
 else:
     DEBUG = False
-    ALLOWED_HOSTS = ['task.ibaidob.com', 'www.ibaidob.com']
+    ALLOWED_HOSTS = ['task.dobltd.com',]
+    
 
 
 # Application definition
@@ -147,7 +148,7 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    CSRF_TRUSTED_ORIGINS = ['https://choice-alien-saved.ngrok-free.app', 'https://task.ibaidob.com']
+    CSRF_TRUSTED_ORIGINS = ['https://choice-alien-saved.ngrok-free.app', 'https://task.dobltd.com']
 else:
     CSRF_TRUSTED_ORIGINS = ["https://choice-alien-saved.ngrok-free.app",]
     
