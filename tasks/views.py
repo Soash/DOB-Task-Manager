@@ -8,7 +8,7 @@ from users.models import CustomUser
 
 @login_required
 def dashboard(request):
-    if request.user.role in [CustomUser.Role.ADMIN, CustomUser.Role.MANAGER]:
+    if request.user.role in [CustomUser.Role.ADMIN, CustomUser.Role.MANAGER] or request.user.is_superuser:
         return redirect("/admin/tasks/task/")
     
     return redirect("task_list_default")
