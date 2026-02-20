@@ -40,47 +40,6 @@ def task_list_by_status(request, status=None):
 @login_required
 def update_task_status(request):
     if request.method != "POST":
-        return redirect("user_dashboard")
-
-    task = get_object_or_404(
-        Task,
-        id=request.POST.get("task_id"),
-        assigned_to=request.user
-    )
-
-    old_status = task.status
-    form = TaskStatusUpdateForm(request.POST, instance=task)
-
-    if not form.is_valid():
-        messages.error(request, "Invalid status selection.")
-        return redirect("user_dashboard")
-
-    new_status = form.cleaned_data["status"]
-
-    # 🔒 Enforce status rules
-    allowed_next = ALLOWED_STATUS_TRANSITIONS.get(old_status, [])
-
-    if new_status not in allowed_next:
-        messages.error(
-            request,
-            f"Cannot change task from {old_status.replace('_', ' ').title()} "
-            f"to {new_status.replace('_', ' ').title()}."
-        )
-        return redirect("user_dashboard")
-
-    task.status = new_status
-    task.save()
-
-    messages.success(
-        request,
-        f"Task '{task.title}' marked as {new_status.replace('_', ' ').title()}."
-    )
-
-    return redirect("user_dashboard")
-
-@login_required
-def update_task_status(request):
-    if request.method != "POST":
         return redirect("dashboard")
 
     task_id = request.POST.get("task_id")
@@ -108,3 +67,5 @@ def update_task_status(request):
     )
 
     return redirect("task_list_by_status", status=task.status)
+
+
