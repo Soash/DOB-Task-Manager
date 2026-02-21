@@ -134,7 +134,27 @@
                                     <td>
                                         <strong>{{ task.title }}</strong>
                                         <div class="text-muted small">
-                                            {{ task.description|truncatechars:60 }}
+                                            <a href="#" data-toggle="modal" data-target="#taskModal{{ task.id }}">
+                                                {{ task.description|truncatechars:60 }}
+                                            </a>
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="taskModal{{ task.id }}" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">{{ task.title }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span>&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" style="word-wrap: break-word; white-space: pre-wrap;">{{ task.description }}</div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
 

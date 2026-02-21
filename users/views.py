@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth.models import Group
 import random
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
@@ -47,6 +48,11 @@ def user_registration(request):
             email = form.cleaned_data.get("username")
             user.email = email
             user.save()
+            
+            if user.role == CustomUser.Role.MANAGER:
+                user.groups.add(Group.objects.get(name="Manager"))
+                user.is_staff = True
+                user.save()
 
             primary_setting = PrimarySetting.objects.first()
             if primary_setting and primary_setting.auto_approve:
