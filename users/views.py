@@ -49,6 +49,8 @@ def user_registration(request):
             user.email = email
             user.save()
             
+            print(f"User {user.email} created with role {user.role}")
+            
             if user.role == CustomUser.Role.MANAGER:
                 user.groups.add(Group.objects.get(name="Manager"))
                 user.is_staff = True
@@ -60,7 +62,7 @@ def user_registration(request):
                 user.save()
                 login(request, user)
                 messages.success(request, "You are now logged in.")
-                return redirect("home")
+                return redirect("dashboard")
             else:
                 messages.success(request, "Your account has been created. Please wait for HR to approve your account.")
 
