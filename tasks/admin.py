@@ -52,7 +52,7 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
     # Filters available in the sidebar
-    list_filter = ("priority",)
+    list_filter = ("assigned_to__department", "assigned_to")
     # Fields editable directly in the list view
     list_editable = ("priority", "status") 
     # Fields searchable via the search box
