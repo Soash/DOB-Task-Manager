@@ -52,11 +52,11 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
     # Filters available in the sidebar
-    list_filter = ("assigned_to__department", "assigned_to")
+    list_filter = ("assigned_to__department", "assigned_to__first_name",)
     # Fields editable directly in the list view
     list_editable = ("priority", "status") 
     # Fields searchable via the search box
-    search_fields = ("title", "description", "assigned_to__username", "assigned_to__first_name")
+    # search_fields = ("title", "description", "assigned_to__username", "assigned_to__first_name")
     # Exclude assigned_by from default forms (will be set automatically)
     exclude = ('assigned_by',)
     # Use custom form for the change page
