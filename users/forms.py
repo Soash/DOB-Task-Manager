@@ -23,12 +23,19 @@ class UserLoginForm(AuthenticationForm):
 
 
 
-
 class CustomUserCreationForm(UserCreationForm):
+    
     department = forms.ModelChoiceField(
         queryset=Department.objects.all().order_by('name'),
-        required=False,
+        required=True,
+        empty_label="Select Dept",
         widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    role = forms.ChoiceField(
+        choices=[("", "Select Role")] + [(r.value, r.label) for r in CustomUser.Role if r != CustomUser.Role.ADMIN],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label="Role"
     )
 
     class Meta:
@@ -49,14 +56,11 @@ class CustomUserCreationForm(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
             field.required = True        
-            
-        # Optional: Add helper text for social profile
+
         self.fields['username'].help_text = None
         self.fields['username'].label = "Email address"
         self.fields['username'].widget.attrs.pop("autofocus", None)
-        self.fields['first_name'].label = "Full Name"
-        
-        
+        self.fields['first_name'].label = "Full Name"       
 
         
 

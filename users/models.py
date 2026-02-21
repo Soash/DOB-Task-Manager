@@ -11,9 +11,9 @@ class Department(models.Model):
 
 class CustomUser(AbstractUser):
     class Role(models.TextChoices):
-        ADMIN = "ADMIN", "Admin"
-        MANAGER = "MANAGER", "Manager"
         USER = "USER", "User"
+        MANAGER = "MANAGER", "Manager"
+        ADMIN = "ADMIN", "Admin"
 
     role = models.CharField(max_length=10, choices=Role.choices, default=Role.USER)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name="users")
