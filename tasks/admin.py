@@ -148,6 +148,12 @@ class TaskAdmin(admin.ModelAdmin):
                 and obj.assigned_by.role == User.Role.ADMIN
             ):
                 readonly.append("priority")
+                readonly.append("title")
+                readonly.append("description")
+                readonly.append("deadline")
+                readonly.append("status")
+                readonly.append("assigned_to")
+                
         return readonly
         
     # 👇 Lock priority field in list_editable rows for Managers if assigned by Admin
