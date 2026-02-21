@@ -49,7 +49,7 @@ def user_registration(request):
             user.email = email
             user.save()
             
-            print(f"User {user.email} created with role {user.role}")
+            # print(f"User {user.email} created with role {user.role}")
             
             if user.role == CustomUser.Role.MANAGER:
                 user.groups.add(Group.objects.get(name="Manager"))
