@@ -13,6 +13,7 @@ class Task(models.Model):
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         IN_PROGRESS = "IN_PROGRESS", "In Progress"
+        REVIEW = "REVIEW", "Review"
         COMPLETED = "COMPLETED", "Completed"
 
     title = models.CharField(max_length=255)

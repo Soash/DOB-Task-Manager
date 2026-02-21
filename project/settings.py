@@ -203,6 +203,12 @@ JAZZMIN_SETTINGS = {
                 "permissions": [],
             },
             {
+                "name": "Review Task",
+                "url": "/admin/tasks/task/?status__exact=REVIEW",
+                "icon": "fa-solid fa-eye",
+                "permissions": [],
+            },
+            {
                 "name": "Completed Task",
                 "url": "/admin/tasks/task/?status__exact=COMPLETED",
                 "icon": "fa-regular fa-circle-check",

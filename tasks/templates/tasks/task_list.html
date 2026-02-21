@@ -76,6 +76,14 @@
                     </li>
 
                     <li class="nav-item">
+                        <a href="{% url 'task_list_by_status' 'REVIEW' %}"
+                           class="nav-link {% if current_status == 'REVIEW' %}active{% endif %}">
+                            <i class="nav-icon fas fa-eye"></i>
+                            <p>Review</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a href="{% url 'task_list_by_status' 'COMPLETED' %}"
                            class="nav-link {% if current_status == 'COMPLETED' %}active{% endif %}">
                             <i class="nav-icon fas fa-check-circle"></i>
@@ -199,9 +207,9 @@
                                         <form method="POST" action="{% url 'update_task_status' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="task_id" value="{{ task.id }}">
-                                            <input type="hidden" name="status" value="COMPLETED">
+                                            <input type="hidden" name="status" value="REVIEW">
                                             <button class="btn btn-sm btn-success">
-                                                Complete
+                                                Review
                                             </button>
                                         </form>
 

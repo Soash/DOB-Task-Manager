@@ -1,0 +1,8 @@
+{% extends "admin/base_site.html" %}
+
+{% comment %} {% block extrahead %}
+    {{ block.super }}
+    <script>
+        window.LOGGED_IN_USER_ROLE = "{{ request.user.role|default:'' }}";
+    </script>
+{% endblock %} {% endcomment %}

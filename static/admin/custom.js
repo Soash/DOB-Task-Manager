@@ -73,18 +73,20 @@
 
         rows.forEach((row) => {
             const assignedToCell = row.querySelector(".field-assigned_to");
+            const assignedByCell = row.querySelector(".field-assigned_by");
             const statusCell = row.querySelector(".field-status");
 
             if (!assignedToCell || !statusCell) return;
 
             const assignedUsername = assignedToCell.textContent.trim();
+            const assignedByUsername = assignedByCell.textContent.trim();
             const statusSelect = statusCell.querySelector("select");
             const currentStatus = statusSelect ? statusSelect.value : "";
 
             if (!statusSelect) return;
 
             highlightCurrentUserTask(row, assignedUsername, currentUsername);
-            blockUnauthorizedStatus(statusSelect, assignedUsername, currentUsername, currentStatus);
+            blockUnauthorizedStatus(statusSelect, assignedUsername, currentUsername, currentStatus, assignedByUsername);
             filterStatusOptions(statusSelect, currentStatus);
         });
     }
@@ -102,14 +104,26 @@
     // ------------------------------
     // 5️⃣ Block status editing for unauthorized users or completed tasks
     // ------------------------------
-    function blockUnauthorizedStatus(statusSelect, assignedUsername, currentUsername, currentStatus) {
-        if (assignedUsername !== currentUsername || currentStatus === "COMPLETED") {
+    function blockUnauthorizedStatus(statusSelect, assignedUsername, currentUsername, currentStatus, assignedByUsername) {
+        // const role = window.LOGGED_IN_USER_ROLE;
+
+        // if (assignedUsername !== currentUsername && currentStatus !== "REVIEW" || currentStatus === "COMPLETED" || (assignedUsername === currentUsername && currentStatus === "REVIEW")) {
+        //     statusSelect.style.pointerEvents = "none"; // prevents editing
+        //     statusSelect.style.opacity = "0.6"; // grayed out
+        //     statusSelect.title = currentStatus === "REVIEW"
+        //         ? "Completed tasks cannot be edited"
+        //         : "You can only change status for tasks assigned to you";
+        // }
+
+        if ((currentStatus !== "REVIEW" && currentUsername !== assignedUsername) || (currentStatus === "REVIEW" && assignedByUsername !== currentUsername) || currentStatus === "COMPLETED") {
             statusSelect.style.pointerEvents = "none"; // prevents editing
             statusSelect.style.opacity = "0.6"; // grayed out
-            statusSelect.title = currentStatus === "COMPLETED"
+            statusSelect.title = currentStatus === "REVIEW"
                 ? "Completed tasks cannot be edited"
                 : "You can only change status for tasks assigned to you";
         }
+
+
     }
 
     // ------------------------------
@@ -120,7 +134,9 @@
         if (currentStatus === "PENDING") {
             allowedOptions.push("PENDING", "IN_PROGRESS");
         } else if (currentStatus === "IN_PROGRESS") {
-            allowedOptions.push("IN_PROGRESS", "COMPLETED");
+            allowedOptions.push("IN_PROGRESS", "REVIEW");
+        } else if (currentStatus === "REVIEW") {
+            allowedOptions.push("REVIEW", "COMPLETED");
         } else if (currentStatus === "COMPLETED") {
             allowedOptions.push("COMPLETED");
         }

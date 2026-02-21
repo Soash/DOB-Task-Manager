@@ -50,7 +50,7 @@ def update_task_status(request):
     # Enforce status rules
     if task.status == "PENDING" and new_status == "IN_PROGRESS":
         task.status = new_status
-    elif task.status == "IN_PROGRESS" and new_status == "COMPLETED":
+    elif task.status == "IN_PROGRESS" and new_status == "REVIEW":
         task.status = new_status
     else:
         messages.error(
