@@ -210,7 +210,7 @@
     function blockUnauthorizedStatus(statusSelect, assignedUsername, currentUsername, currentStatus, assignedByUsername) {
         // const role = window.LOGGED_IN_USER_ROLE;
 
-        if ((currentStatus !== "REVIEW" && currentUsername !== assignedUsername) || (currentStatus === "REVIEW" && assignedByUsername !== currentUsername) || currentStatus === "COMPLETED") {
+        if ((currentStatus !== "REVIEW" && currentUsername !== assignedUsername) || (currentStatus === "REVIEW" && assignedByUsername !== currentUsername) || currentStatus === "COMPLETED" || currentStatus === "BLOCKED") {
             statusSelect.style.pointerEvents = "none"; // prevents editing
             statusSelect.style.opacity = "0.6"; // grayed out
             statusSelect.title = currentStatus === "REVIEW"
@@ -232,6 +232,8 @@
             allowedOptions.push("REVIEW", "COMPLETED");
         } else if (currentStatus === "COMPLETED") {
             allowedOptions.push("COMPLETED");
+        } else if (currentStatus === "BLOCKED") {
+            allowedOptions.push("BLOCKED");
         }
 
         Array.from(statusSelect.options).forEach(option => {

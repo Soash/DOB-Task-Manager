@@ -224,7 +224,7 @@ JAZZMIN_SETTINGS = {
                 "name": "Send Reminders",
                 "url": "/admin-action/send-reminders/",
                 "icon": "fa-solid fa-envelope",
-                "permissions": ["auth.view_user"],
+                "permissions": [],
             }
         ]
     },
