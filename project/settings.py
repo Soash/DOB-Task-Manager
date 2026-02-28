@@ -213,6 +213,18 @@ JAZZMIN_SETTINGS = {
                 "url": "/admin/tasks/task/?status__exact=COMPLETED",
                 "icon": "fa-regular fa-circle-check",
                 "permissions": [],
+            },
+            {
+                "name": "Blocked Task",
+                "url": "/admin/tasks/task/?status__exact=BLOCKED",
+                "icon": "fa-solid fa-ban",
+                "permissions": [],
+            },
+            {
+                "name": "Send Reminders",
+                "url": "/admin-action/send-reminders/",
+                "icon": "fa-solid fa-envelope",
+                "permissions": ["auth.view_user"],
             }
         ]
     },

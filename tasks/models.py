@@ -15,6 +15,7 @@ class Task(models.Model):
         IN_PROGRESS = "IN_PROGRESS", "In Progress"
         REVIEW = "REVIEW", "Review"
         COMPLETED = "COMPLETED", "Completed"
+        BLOCKED = "BLOCKED", "Blocked"
 
     title = models.CharField(max_length=255)
     description = models.TextField()

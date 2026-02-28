@@ -69,3 +69,46 @@ def update_task_status(request):
     return redirect("task_list_by_status", status=task.status)
 
 
+
+
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib.auth.decorators import user_passes_test
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def send_deadline_reminders(request):
+    tomorrow = timezone.localdate() + timedelta(days=1)
+    tasks_due_tomorrow = Task.objects.filter(
+        deadline=tomorrow,
+        status__in=[Task.Status.PENDING, Task.Status.IN_PROGRESS]
+    )
+
+    sent_count = 0
+    for task in tasks_due_tomorrow:
+        if task.assigned_to and task.assigned_to.email:
+            subject = f"Reminder: Task '{task.title}' is due tomorrow!"
+            message = (
+                f"Hello {task.assigned_to.first_name or task.assigned_to.username},\n\n"
+                f"This is a reminder that your task '{task.title}' is due tomorrow ({task.deadline}).\n"
+                f"Current Status: {task.get_status_display()}\n\n"
+                f"Please ensure it is completed on time.\n\n"
+                f"Regards,\nDOB Task Manager"
+            )
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [task.assigned_to.email],
+                    fail_silently=True,
+                )
+                sent_count += 1
+            except Exception:
+                pass
+
+    messages.success(request, f"Successfully sent {sent_count} deadline reminder(s).")
+    return redirect("/admin/tasks/task/?status__exact=PENDING")
+
