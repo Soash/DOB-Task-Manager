@@ -246,7 +246,7 @@
         const tabLinks = document.querySelectorAll(".nav-tabs .nav-link");
 
         tabLinks.forEach(link => {
-            link.addEventListener("click", function(event) {
+            link.addEventListener("click", function (event) {
                 const tabId = this.getAttribute("href"); // e.g., #general-tab
 
                 // Update the URL without reloading
@@ -281,7 +281,7 @@
         initDeadlineIndicators();
         const currentUsername = getCurrentUsername();
         processChangelistRows(currentUsername);
-        
+
     }
 
     // Run init after DOM is ready
@@ -292,3 +292,5 @@
     }
 
 })();
+
+
